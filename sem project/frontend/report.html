@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Report - SAFEGUARD</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--accent);">.gov.in</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 2rem; align-items: center; list-style: none;">
+                <li><a href="index.html"
+                        style="text-decoration: none; color: var(--text-white); font-weight: 600;">Home</a></li>
+                <li><a href="track.html"
+                        style="text-decoration: none; color: var(--text-white); font-weight: 600;">Track Status</a></li>
+                <li><button onclick="localStorage.removeItem('token'); window.location.href='portal.html'"
+                        class="btn btn-outline" style="padding: 0.4rem 1rem;">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" style="position: relative;">
+        <div class="hero-glow"></div>
+
+        <div style="max-width: 900px; margin: 4rem auto;">
+            <div style="text-align: center; margin-bottom: 4rem; animation: slideUp 0.8s ease;">
+                <h2 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem;">File a <span
+                        style="color: var(--primary);">Crime Report</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Secure, direct reporting to law enforcement
+                    portals.</p>
+            </div>
+
+            <form id="report-form" class="glass-card" style="padding: 4rem; animation: slideUp 1s ease;">
+                <div class="form-group" style="animation: slideUp 1.2s ease;">
+                    <span class="bilingual-label">Report Title*</span>
+                    <input type="text" id="title" class="form-input" placeholder="Briefly describe the incident"
+                        required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+                    <div class="form-group" style="animation: slideUp 1.3s ease;">
+                        <span class="bilingual-label">Category*</span>
+                        <select id="category" class="form-input" required onchange="updateIPCInfo(this.value)">
+                            <option value="">Select Category</option>
+                            <option value="Theft">Theft</option>
+                            <option value="Assault">Assault</option>
+                            <option value="Cybercrime">Cybercrime</option>
+                            <option value="Fraud">Fraud</option>
+                            <option value="Harassment">Harassment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div id="ipc-suggestion"></div>
+                    </div>
+                    <div class="form-group" style="animation: slideUp 1.4s ease;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                            <span class="bilingual-label">Location*</span>
+                            <button type="button" onclick="getLocation()"
+                                style="background: none; border: none; color: var(--primary); font-size: 0.85rem; cursor: pointer; text-decoration: underline;">
+                                📍 Detect Location
+                            </button>
+                        </div>
+                        <input type="text" id="location" class="form-input" placeholder="City, Area or Landmark"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem; animation: slideUp 1.5s ease;">
+                    <span class="bilingual-label">Detailed Description*</span>
+                    <textarea id="description" class="form-input" rows="5"
+                        placeholder="Provide details of what happened..." required></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+                    <div class="form-group" style="animation: slideUp 1.6s ease;">
+                        <span class="bilingual-label">Aadhar Number (Verification)*</span>
+                        <input type="text" id="aadhar" class="form-input" placeholder="XXXX XXXX XXXX" maxlength="14">
+                    </div>
+                    <div class="form-group" style="animation: slideUp 1.7s ease;">
+                        <span class="bilingual-label">Phone Number*</span>
+                        <input type="tel" id="phone_number" class="form-input" placeholder="Your mobile number"
+                            required>
+                    </div>
+                    <div class="form-group" style="animation: slideUp 1.8s ease;">
+                        <span class="bilingual-label">Upload Evidence</span>
+                        <input type="file" id="evidence" class="form-input" multiple>
+                    </div>
+                </div>
+
+                <div
+                    style="margin: 2.5rem 0; padding: 1.5rem; border-radius: 1rem; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; gap: 1rem; animation: slideUp 1.8s ease;">
+                    <input type="checkbox" id="anonymous" style="width: 1.5rem; height: 1.5rem; cursor: pointer;"
+                        onchange="document.getElementById('aadhar').disabled = this.checked">
+                    <label for="anonymous" style="margin: 0; color: var(--text-white); cursor: pointer;">Submit as
+                        Anonymous Report (No Aadhar Verification)</label>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn btn-primary"
+                    style="width: 100%; padding: 1.25rem; font-size: 1.2rem; background: var(--secondary); border-bottom: 4px solid #0d6305; animation: slideUp 1.9s ease;">Submit
+                    to Database</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="glass"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; text-align: center; z-index: 2000; max-width: 400px; width: 90%;">
+        <div style="font-size: 4rem; margin-bottom: 1.5rem;">✅</div>
+        <h3>Report Submitted!</h3>
+        <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Save your Tracking ID to check status later:</p>
+        <div id="tracking-id-display"
+            style="font-size: 1.5rem; font-weight: 800; color: var(--primary); background: rgba(99, 102, 241, 0.1); padding: 1rem; border-radius: 0.5rem; letter-spacing: 2px;">
+        </div>
+        <button onclick="window.location.href='index.html'" class="btn btn-primary"
+            style="margin-top: 2rem; width: 100%;">Return Home</button>
+    </div>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ipc_data.js"></script>
+    <script>
+        document.getElementById('report-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Submitting...";
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('location', document.getElementById('location').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('phone_number', document.getElementById('phone_number').value);
+            formData.append('aadhar', document.getElementById('aadhar').value);
+            formData.append('is_anonymous', document.getElementById('anonymous').checked);
+
+            const fileInput = document.getElementById('evidence');
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('evidence', fileInput.files[i]);
+            }
+
+            try {
+                const res = await api.post('/reports/submit', formData, true);
+                if (res.tracking_id) {
+                    document.getElementById('report-form').style.display = 'none';
+                    document.getElementById('tracking-id-display').innerText = res.tracking_id;
+                    document.getElementById('success-modal').style.display = 'block';
+                } else {
+                    showNotification(res.msg || "Submission failed", "error");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Submit Crime Report";
+                }
+            } catch (err) {
+                showNotification("Server error during submission", "error");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Submit Crime Report";
+            }
+        });
+
+        function getLocation() {
+            const locInput = document.getElementById('location');
+            if (navigator.geolocation) {
+                locInput.placeholder = "Detecting location...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        locInput.value = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                        showNotification("Location detected successfully!");
+                    },
+                    (error) => {
+                        showNotification("Could not detect location automatically", "error");
+                        locInput.placeholder = "City, Area or Landmark";
+                    }
+                );
+            } else {
+                showNotification("Geolocation not supported by your browser", "error");
+            }
+        }
+    </script>
+</body>
+
+</html>

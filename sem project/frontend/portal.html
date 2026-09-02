@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Portal - SAFEGUARD</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .status-badge {
+            padding: 0.35rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--primary);"> Citizen Portal</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 1.5rem; align-items: center; list-style: none;">
+                <li><a href="index.html" style="text-decoration: none; color: var(--text-white); font-weight: 600;">Home</a></li>
+                <li><a href="#file-report-section" class="btn btn-outline" style="padding: 0.4rem 1rem; border-color: var(--primary); color: var(--primary);">+ File Complaint</a></li>
+                <li id="user-display" style="color: var(--text-muted); font-size: 0.9rem;"></li>
+                <li><button onclick="logout()" class="btn btn-outline" style="padding: 0.4rem 1rem;">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" style="position: relative; margin-top: 2rem; margin-bottom: 4rem;">
+        <div class="hero-glow"></div>
+
+        <!-- Citizen Profile Banner -->
+        <div class="glass-card" style="padding: 2rem; margin-bottom: 2.5rem; border-left: 5px solid var(--primary); animation: slideUp 0.8s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 id="citizen-name" style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.3rem;">Welcome, Citizen</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">National Cyber & Crime Reporting Portal | Confidential & Secure</p>
+                </div>
+                <div style="display: flex; gap: 2rem; background: rgba(255,255,255,0.03); padding: 1rem 1.5rem; border-radius: 8px;">
+                    <div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Email Address</p>
+                        <p id="citizen-email" style="font-weight: 600;">-</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Phone Number</p>
+                        <p id="citizen-phone" style="font-weight: 600;">-</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Role Account</p>
+                        <p style="font-weight: 600; color: var(--accent-green);">Citizen User</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: My Reported Complaints -->
+        <div class="glass-card" style="padding: 2.5rem; margin-bottom: 3rem; animation: slideUp 1s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">📋 My Submitted Complaints & Case Status</h3>
+                <button onclick="loadMyReports()" class="btn btn-outline" style="font-size: 0.8rem;">🔄 Refresh Statuses</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tracking ID</th>
+                        <th>Incident Title</th>
+                        <th>Category</th>
+                        <th>Severity</th>
+                        <th>Current Status</th>
+                        <th>Submission Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="my-reports-body">
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading your submitted complaints...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 2: File New Complaint Form -->
+        <div id="file-report-section" class="glass-card" style="padding: 2.5rem; animation: slideUp 1.2s ease; border-top: 4px solid var(--primary);">
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">✍️ File a New Crime Complaint</h3>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">Fill out the incident details. Your complaint will be logged directly into the Police Database.</p>
+
+            <form id="report-form" enctype="multipart/form-data">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>Incident Title *</label>
+                        <input type="text" id="title" name="title" class="form-input" placeholder="e.g. Theft of Wallet at Bus Stand" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Crime Category *</label>
+                        <select id="category" name="category" class="form-input" required>
+                            <option value="">-- Select Crime Category --</option>
+                            <option value="Cybercrime">Cybercrime / Online Fraud</option>
+                            <option value="Theft">Theft / Larceny</option>
+                            <option value="Armed Robbery">Armed Robbery / Burglary</option>
+                            <option value="Assault">Physical Assault / Violence</option>
+                            <option value="Vandalism">Vandalism / Property Damage</option>
+                            <option value="Harassment">Harassment / Stalking</option>
+                            <option value="Other">Other Emergency Incident</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Severity Level</label>
+                        <select id="severity" name="severity" class="form-input">
+                            <option value="Low">Low (Property Loss, Non-urgent)</option>
+                            <option value="Medium" selected>Medium (Standard Incident)</option>
+                            <option value="High">High (Serious Fraud or Injury Risk)</option>
+                            <option value="Critical">Critical (Immediate Emergency)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Incident Location *</label>
+                        <input type="text" id="location" name="location" class="form-input" placeholder="e.g. Sector 17 Market, Chandigarh" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Phone Number</label>
+                        <input type="tel" id="phone_number" name="phone_number" class="form-input" placeholder="+91 9876543210">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Aadhar / Govt ID Number (Optional)</label>
+                        <input type="text" id="aadhar" name="aadhar" class="form-input" placeholder="XXXX-XXXX-1234">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Incident Description & Details *</label>
+                    <textarea id="description" name="description" class="form-input" rows="4" placeholder="Provide complete details about what happened, time of occurrence, perpetrators involved, etc." required></textarea>
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Upload Evidence Attachment (Photos, Videos, PDF Documents)</label>
+                    <input type="file" id="evidence" name="evidence" class="form-input" multiple accept="image/*,video/*,application/pdf">
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="is_anonymous" name="is_anonymous" value="true" style="width: 18px; height: 18px;">
+                    <label for="is_anonymous" style="color: var(--text-white); font-weight: 600; margin: 0; cursor: pointer;">
+                        Submit Anonymously (Hide my name on public views)
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem; padding: 1rem; font-size: 1.1rem; border-bottom: 4px solid var(--primary-hover);">
+                    🚀 Submit Complaint to Database
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Complaint Details & Investigation Log Modal -->
+    <div id="complaint-modal" class="glass"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2.5rem; z-index: 2000; width: 650px; max-height: 85vh; overflow-y: auto;">
+        <div id="modal-content"></div>
+        <button onclick="closeComplaintModal()" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Close Window</button>
+    </div>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        async function initCitizenPortal() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                // Fetch profile
+                const profile = await api.get('/auth/me');
+                if (profile.username) {
+                    document.getElementById('user-display').innerText = `👤 ${profile.full_name}`;
+                    document.getElementById('citizen-name').innerText = `Welcome, ${profile.full_name}`;
+                    document.getElementById('citizen-email').innerText = profile.email;
+                    document.getElementById('citizen-phone').innerText = profile.phone_number || 'N/A';
+                    if (!document.getElementById('phone_number').value && profile.phone_number) {
+                        document.getElementById('phone_number').value = profile.phone_number;
+                    }
+                }
+            } catch (err) {
+                console.log("Profile fetch error", err);
+            }
+
+            loadMyReports();
+        }
+
+        async function loadMyReports() {
+            try {
+                const reports = await api.get('/reports/my-reports');
+                const tbody = document.getElementById('my-reports-body');
+                tbody.innerHTML = '';
+
+                if (reports.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">You have not submitted any complaints yet. Use the form below to file a report.</td></tr>';
+                    return;
+                }
+
+                reports.forEach(r => {
+                    const date = new Date(r.created_at).toLocaleDateString();
+                    const statusColors = {
+                        'Submitted': 'rgba(245, 158, 11, 0.2)',
+                        'Under Review': 'rgba(99, 102, 241, 0.2)',
+                        'Investigating': 'rgba(236, 72, 153, 0.2)',
+                        'Resolved': 'rgba(16, 185, 129, 0.2)',
+                        'Closed': 'rgba(107, 114, 128, 0.2)'
+                    };
+                    const textColors = {
+                        'Submitted': '#fbbf24',
+                        'Under Review': '#818cf8',
+                        'Investigating': '#f472b6',
+                        'Resolved': '#34d399',
+                        'Closed': '#9ca3af'
+                    };
+
+                    const row = `
+                        <tr>
+                            <td style="font-family: monospace; font-weight: 700; color: var(--primary);">${r.tracking_id}</td>
+                            <td><b>${r.title}</b></td>
+                            <td>${r.category}</td>
+                            <td><span style="font-weight: 700; color: ${r.severity === 'Critical' ? '#ef4444' : r.severity === 'High' ? '#f97316' : '#38bdf8'}">${r.severity || 'Medium'}</span></td>
+                            <td>
+                                <span class="status-badge" style="background: ${statusColors[r.status] || 'rgba(255,255,255,0.1)'}; color: ${textColors[r.status] || '#fff'}">
+                                    ${r.status}
+                                </span>
+                            </td>
+                            <td>${date}</td>
+                            <td>
+                                <button onclick="viewComplaintDetails(${r.id})" class="btn btn-outline" style="padding: 0.3rem 0.7rem; font-size: 0.8rem;">🔍 Status & Logs</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            } catch (err) {
+                showNotification("Error loading complaints", "error");
+            }
+        }
+
+        async function viewComplaintDetails(id) {
+            try {
+                const reports = await api.get('/reports/my-reports');
+                const r = reports.find(item => item.id === id);
+                if (!r) return;
+
+                const modal = document.getElementById('complaint-modal');
+                const content = document.getElementById('modal-content');
+
+                let historyHtml = r.status_history.length > 0 ?
+                    r.status_history.map(sh => `<li style="margin-bottom:0.5rem; background:rgba(255,255,255,0.03); padding:0.8rem; border-radius:6px;">
+                        <b style="color:var(--primary)">[${new Date(sh.timestamp).toLocaleString()}] Status: ${sh.status}</b><br>
+                        <span style="font-size:0.85rem; color:var(--text-muted)">Updated by: ${sh.updated_by}</span><br>
+                        <span style="font-size:0.9rem;">Note: ${sh.comment || 'No comment provided.'}</span>
+                    </li>`).join('') :
+                    '<li>No investigation history recorded yet.</li>';
+
+                content.innerHTML = `
+                    <div style="margin-bottom: 1.5rem;">
+                        <span class="status-badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8">${r.status}</span>
+                        <h3 style="margin-top: 0.5rem;">${r.title}</h3>
+                        <p style="color: var(--text-muted)">Tracking ID: <b>${r.tracking_id}</b> | Category: ${r.category}</p>
+                    </div>
+                    <div style="margin-bottom: 1.5rem; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                        <p><strong>Incident Location:</strong> ${r.location}</p>
+                        <p><strong>Severity:</strong> ${r.severity}</p>
+                        <p><strong>Submission Date:</strong> ${new Date(r.created_at).toLocaleString()}</p>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Incident Description:</strong></p>
+                        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem; margin-top: 0.5rem;">${r.description}</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 0.8rem;">🚨 Police Investigation Updates & Log Trail:</h4>
+                        <ul style="list-style: none; padding: 0;">${historyHtml}</ul>
+                    </div>
+                `;
+
+                modal.style.display = 'block';
+            } catch (err) {
+                showNotification("Error loading complaint details", "error");
+            }
+        }
+
+        function closeComplaintModal() {
+            document.getElementById('complaint-modal').style.display = 'none';
+        }
+
+        document.getElementById('report-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            try {
+                const res = await api.post('/reports/submit', formData, true);
+                if (res.tracking_id) {
+                    showNotification(`Complaint submitted! Tracking ID: ${res.tracking_id}`);
+                    e.target.reset();
+                    loadMyReports();
+                } else {
+                    showNotification(res.msg || "Submission failed", "error");
+                }
+            } catch (err) {
+                showNotification("Server error during submission", "error");
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', initCitizenPortal);
+    </script>
+</body>
+
+</html>

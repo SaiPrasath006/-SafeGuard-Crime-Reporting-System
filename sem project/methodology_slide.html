@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Methodology - Online Crime Reporting System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.5);
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-agile: #6366f1;
+            --accent-arch: #f43f5e;
+            --accent-sec: #f59e0b;
+            --accent-ui: #0ea5e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+        }
+
+        .slide {
+            width: 90vw;
+            height: 85vh;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            flex-grow: 1;
+        }
+
+        .method-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .method-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px -10px var(--primary-glow);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .icon-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .method-card h2 {
+            font-size: 1.4rem;
+            color: var(--text);
+        }
+
+        .method-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Section Specifics */
+        .agile .icon-container {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-agile);
+        }
+
+        .agile {
+            animation-delay: 0.2s;
+        }
+
+        .arch .icon-container {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-arch);
+        }
+
+        .arch {
+            animation-delay: 0.3s;
+        }
+
+        .security .icon-container {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-sec);
+        }
+
+        .security {
+            animation-delay: 0.4s;
+        }
+
+        .uiux .icon-container {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-ui);
+        }
+
+        .uiux {
+            animation-delay: 0.5s;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide">
+        <header>
+            <div>
+                <div class="subtitle">Process Overview</div>
+                <h1>Development Methodology</h1>
+            </div>
+            <div style="text-align: right;">
+                <div class="subtitle" style="color: var(--text-muted);">Seminar Presentation</div>
+                <div style="font-weight: 600; font-size: 1.1rem;">Online Crime Reporting</div>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- Agile -->
+            <div class="method-card agile">
+                <div class="icon-row">
+                    <div class="icon-container">
+                        <i data-lucide="refresh-cw" size="24"></i>
+                    </div>
+                    <h2>Agile Iterations</h2>
+                </div>
+                <p>Incremental development cycles (Sprints) allowing for continuous feedback, testing, and refinement of
+                    core reporting features.</p>
+            </div>
+
+            <!-- Architecture -->
+            <div class="method-card arch">
+                <div class="icon-row">
+                    <div class="icon-container">
+                        <i data-lucide="git-branch" size="24"></i>
+                    </div>
+                    <h2>Decoupled Architecture</h2>
+                </div>
+                <p>Clear separation between Backend (Rest API) and Frontend (Vanilla JS), ensuring scalability and
+                    independent maintenance.</p>
+            </div>
+
+            <!-- Security -->
+            <div class="method-card security">
+                <div class="icon-row">
+                    <div class="icon-container">
+                        <i data-lucide="lock" size="24"></i>
+                    </div>
+                    <h2>Security by Design</h2>
+                </div>
+                <p>Integrating JWT authentication and Bcrypt data hashing as foundational requirements rather than final
+                    additions.</p>
+            </div>
+
+            <!-- UI/UX -->
+            <div class="method-card uiux">
+                <div class="icon-row">
+                    <div class="icon-container">
+                        <i data-lucide="mouse-pointer-2" size="24"></i>
+                    </div>
+                    <h2>Modern Aesthetic</h2>
+                </div>
+                <p>User-centric design methodology using Glassmorphism to create a premium, intuitive, and responsive
+                    reporting experience.</p>
+            </div>
+        </div>
+
+        <footer>
+            <span><span class="dot"></span>Online Crime Reporting System &copy; 2026</span>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

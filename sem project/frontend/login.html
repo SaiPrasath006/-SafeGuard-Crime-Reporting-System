@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SAFEGUARD</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="portal.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--accent);">.gov.in</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 2rem; align-items: center; list-style: none;">
+                <li><a href="login.html" style="text-decoration: none; color: var(--text-white); font-weight: 600;">User
+                        Login</a></li>
+                <li><a href="login.html?role=admin" target="_blank"
+                        style="text-decoration: none; color: var(--text-white); font-weight: 600;">Admin Login</a></li>
+                <li><a href="register.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem;">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container"
+        style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+        <div class="hero-glow"></div>
+
+        <div class="glass-card"
+            style="width: 100%; max-width: 450px; padding: 4rem 3rem; animation: slideUp 0.8s ease;">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; animation: slideUp 1s ease;">
+                    Welcome Back</h2>
+                <p style="color: var(--text-muted); animation: slideUp 1.2s ease;">Secure login to your citizen account
+                </p>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group" style="animation: slideUp 1.4s ease;">
+                    <label>Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group" style="animation: slideUp 1.5s ease;">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; margin-top: 1.5rem; padding: 1rem; font-size: 1.1rem; animation: slideUp 1.6s ease; border-bottom: 4px solid var(--primary-hover);">Sign
+                    In</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 2rem; color: var(--text-muted); animation: slideUp 1.8s ease;">
+                Don't have an account? <a href="register.html" style="color: var(--primary); font-weight: 600;">Register
+                    here</a>
+            </p>
+        </div>
+    </main>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Check for admin role in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role');
+        const loginHeader = document.querySelector('h2');
+        if (role === 'admin') {
+            loginHeader.innerText = "Admin Login";
+            loginHeader.style.color = "var(--accent)";
+        } else {
+            loginHeader.innerText = "Citizen Login";
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await api.post('/auth/login', { username, password });
+                if (res.access_token) {
+                    localStorage.setItem('token', res.access_token);
+                    localStorage.setItem('username', res.user ? res.user.username : res.username);
+                    localStorage.setItem('role', res.user ? res.user.role : res.role);
+                    if (res.user) {
+                        localStorage.setItem('user', JSON.stringify(res.user));
+                    }
+                    showNotification("Login successful! Redirecting...");
+                    setTimeout(() => {
+                        const userRole = res.user ? res.user.role : res.role;
+                        if (userRole === 'admin' || userRole === 'officer') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'portal.html';
+                        }
+                    }, 1000);
+                } else {
+
+                    showNotification(res.msg || "Login failed", "error");
+                }
+            } catch (err) {
+                showNotification("Server error", "error");
+            }
+        });
+    </script>
+</body>
+
+</html>

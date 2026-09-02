@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SAFEGUARD</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="portal.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--accent);">.gov.in</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 2rem; align-items: center; list-style: none;">
+                <li><a href="login.html" style="text-decoration: none; color: var(--text-white); font-weight: 600;">User
+                        Login</a></li>
+                <li><a href="login.html?role=admin" target="_blank"
+                        style="text-decoration: none; color: var(--text-white); font-weight: 600;">Admin Login</a></li>
+                <li><a href="register.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem;">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container"
+        style="position: relative; display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+        <div class="hero-glow"></div>
+
+        <div class="glass-card"
+            style="width: 100%; max-width: 450px; padding: 4rem 3rem; animation: slideUp 0.8s ease;">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; animation: slideUp 1s ease;">
+                    Create Account</h2>
+                <p style="color: var(--text-muted); animation: slideUp 1.2s ease;">Join the Digital India Safety
+                    Initiative</p>
+            </div>
+
+            <form id="register-form">
+                <div class="form-group" style="animation: slideUp 1.3s ease;">
+                    <label>Full Name</label>
+                    <input type="text" id="full_name" class="form-input" placeholder="e.g. Ramesh Kumar" required>
+                </div>
+                <div class="form-group" style="animation: slideUp 1.4s ease;">
+                    <label>Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group" style="animation: slideUp 1.5s ease;">
+                    <label>Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="ramesh@example.com" required>
+                </div>
+                <div class="form-group" style="animation: slideUp 1.6s ease;">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone_number" class="form-input" placeholder="+91 9876543210" required>
+                </div>
+                <div class="form-group" style="animation: slideUp 1.7s ease;">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Minimum 6 characters" required
+                        minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; margin-top: 1.5rem; padding: 1rem; font-size: 1.1rem; animation: slideUp 1.8s ease; border-bottom: 4px solid var(--primary-hover);">Sign
+                    Up</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 2rem; color: var(--text-muted); animation: slideUp 1.9s ease;">
+                Already have an account? <a href="login.html" style="color: var(--primary); font-weight: 600;">Login
+                    here</a>
+            </p>
+        </div>
+    </main>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const full_name = document.getElementById('full_name').value;
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const phone_number = document.getElementById('phone_number').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await api.post('/auth/register', { full_name, username, email, phone_number, password });
+                if (res.msg.includes("successfully")) {
+                    showNotification("Registration successful! Redirecting to login...");
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showNotification(res.msg || "Registration failed", "error");
+                }
+            } catch (err) {
+                showNotification("Server error during registration", "error");
+            }
+        });
+    </script>
+
+</body>
+
+</html>

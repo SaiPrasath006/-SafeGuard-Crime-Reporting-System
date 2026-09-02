@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuard - National Crime Reporting & Command Portal</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .portal-card {
+            padding: 3.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-white);
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .portal-card.citizen {
+            border-top: 4px solid var(--primary);
+            border-bottom: 4px solid var(--secondary);
+        }
+
+        .portal-card.admin {
+            border-top: 4px solid var(--accent);
+            border-bottom: 4px solid var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--primary);">.gov.in</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 1.5rem; align-items: center; list-style: none;">
+                <li><a href="track.html" style="text-decoration: none; color: var(--text-white); font-weight: 600;">🔍 Track Complaint</a></li>
+                <li><a href="login.html" style="text-decoration: none; color: var(--text-white); font-weight: 600;">Citizen Login</a></li>
+                <li><a href="login.html?role=admin" class="btn btn-outline" style="padding: 0.5rem 1rem; border-color: var(--accent); color: var(--accent);">🛡️ Admin Login</a></li>
+                <li><a href="register.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" style="position: relative; min-height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="hero-glow"></div>
+
+        <section style="text-align: center; padding: 3rem 0; width: 100%;">
+            <div style="margin-bottom: 2rem; animation: slideUp 0.8s ease;">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/95/Digital_India_logo.svg/1200px-Digital_India_logo.svg.png" height="90">
+            </div>
+
+            <h1 style="font-size: 3.8rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.2rem; animation: slideUp 1s ease;">
+                National Digital Safety Portal<br>
+                <span style="color: var(--primary); text-shadow: 0 0 25px rgba(255, 153, 51, 0.4);">Select Portal Access</span>
+            </h1>
+
+            <p style="color: var(--text-muted); font-size: 1.25rem; max-width: 750px; margin: 0 auto 3.5rem; line-height: 1.6; animation: slideUp 1.2s ease;">
+                Select your designated portal below. Citizens can file and track complaints, while Law Enforcement officers access case management.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; max-width: 950px; width: 100%; margin: 0 auto; animation: slideUp 1.4s ease;">
+                
+                <!-- Portal 1: Citizen Portal -->
+                <a href="portal.html" class="glass-card portal-card citizen">
+                    <div style="font-size: 3.5rem; margin-bottom: 1.2rem;">👤</div>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.8rem;">Citizen Portal</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 2rem;">
+                        File crime reports, upload evidence attachments, track incident statuses, and view personal submitted complaints.
+                    </p>
+                    <span class="btn btn-primary" style="width: 80%; padding: 0.8rem;">Enter Citizen Portal →</span>
+                </a>
+
+                <!-- Portal 2: Police & Admin Command Center -->
+                <a href="admin.html" class="glass-card portal-card admin">
+                    <div style="font-size: 3.5rem; margin-bottom: 1.2rem;">🛡️</div>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--accent);">Police Command Center</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 2rem;">
+                        Official dashboard for Law Enforcement. Inspect national case filings, audit citizen complaints, and update investigation logs.
+                    </p>
+                    <span class="btn btn-outline" style="width: 80%; padding: 0.8rem; border-color: var(--accent); color: var(--accent);">Enter Command Center →</span>
+                </a>
+
+            </div>
+
+            <div style="margin-top: 4rem; display: flex; gap: 2rem; justify-content: center; align-items: center; color: var(--text-muted); font-size: 0.9rem; animation: slideUp 1.6s ease;">
+                <span>🇮🇳 Ministry of Home Affairs</span>
+                <span>•</span>
+                <span>🔒 256-Bit Encrypted Database</span>
+                <span>•</span>
+                <span><a href="track.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">🔍 Public Complaint Tracker</a></span>
+            </div>
+        </section>
+    </main>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SAFEGUARD</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--accent);"> Admin</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 2rem; align-items: center; list-style: none;">
+                <li><a href="index.html" style="text-decoration: none; color: var(--text-white); font-weight: 600;">View
+                        Site</a></li>
+                <li><button onclick="logout()" class="btn btn-outline" style="padding: 0.4rem 1rem;">Logout</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" style="position: relative;">
+        <div class="hero-glow"></div>
+
+        <div style="margin: 3rem 0; animation: slideUp 0.8s ease; text-align: center;">
+            <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">National <span
+                    style="color: var(--primary);">Command Center</span></h2>
+            <p style="color: var(--text-muted);">Real-time surveillance and case management across all Indian zones.</p>
+        </div>
+
+        <div class="stats-grid" style="animation: slideUp 1s ease;">
+            <div class="glass-card stat-card" style="border-bottom: 4px solid #8e44ad;">
+                <p class="stat-label">North Zone</p>
+                <p class="stat-value">12</p>
+            </div>
+            <div class="glass-card stat-card" style="border-bottom: 4px solid var(--secondary);">
+                <p class="stat-label">South Zone</p>
+                <p class="stat-value" style="color: var(--secondary)">08</p>
+            </div>
+            <div class="glass-card stat-card" style="border-bottom: 4px solid var(--accent);">
+                <p class="stat-label">East Zone</p>
+                <p class="stat-value" style="color: var(--accent)">05</p>
+            </div>
+            <div class="glass-card stat-card" style="border-bottom: 4px solid var(--primary);">
+                <p class="stat-label">West Zone</p>
+                <p class="stat-value" style="color: var(--primary)">09</p>
+            </div>
+        </div>
+
+        <div class="stats-grid" style="animation: slideUp 1.2s ease;">
+            <div class="glass-card stat-card" style="background: rgba(255, 255, 255, 0.02);">
+                <p class="stat-label">Total Reports</p>
+                <p id="stat-total" class="stat-value">0</p>
+            </div>
+            <div class="glass-card stat-card" style="background: rgba(245, 158, 11, 0.05);">
+                <p class="stat-label">Pending</p>
+                <p id="stat-pending" class="stat-value" style="color: var(--accent-yellow)">0</p>
+            </div>
+            <div class="glass-card stat-card" style="background: rgba(99, 102, 241, 0.05);">
+                <p class="stat-label">Under Review</p>
+                <p id="stat-review" class="stat-value" style="color: var(--primary)">0</p>
+            </div>
+            <div class="glass-card stat-card" style="background: rgba(16, 185, 129, 0.05);">
+                <p class="stat-label">Total Registered Users</p>
+                <p id="stat-users" class="stat-value" style="color: var(--accent-green)">0</p>
+            </div>
+        </div>
+
+        <!-- Section 1: Recent Case Filings -->
+        <div class="glass-card" style="padding: 2.5rem; overflow-x: auto; margin-bottom: 3rem; animation: slideUp 1.4s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">🚨 Recent Case Filings & Crime Reports</h3>
+                <button onclick="loadAdminData()" class="btn btn-outline" style="font-size: 0.8rem;">🔄 Refresh Feed</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tracking ID</th>
+                        <th>Incident Title</th>
+                        <th>Category</th>
+                        <th>Severity</th>
+                        <th>Reporter Info</th>
+                        <th>Current Status</th>
+                        <th>Submission Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="reports-table-body">
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 2: Registered Citizens & Users Directory -->
+        <div class="glass-card" style="padding: 2.5rem; overflow-x: auto; animation: slideUp 1.6s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">👤 Registered Citizens & System Users</h3>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">Click 'View User Complaints' to inspect all crimes submitted by that user</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Crimes Filed</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Details Modal -->
+    <div id="details-modal" class="glass"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2.5rem; z-index: 2000; width: 680px; max-height: 85vh; overflow-y: auto;">
+        <div id="details-content"></div>
+        <button onclick="closeDetails()" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Close</button>
+    </div>
+
+    <!-- User Crimes Audit Modal -->
+    <div id="user-audit-modal" class="glass"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2.5rem; z-index: 2000; width: 700px; max-height: 85vh; overflow-y: auto;">
+        <div id="user-audit-content"></div>
+        <button onclick="closeUserAudit()" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Close Audit</button>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="status-modal" class="glass"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2.5rem; z-index: 2000; width: 450px;">
+        <h3>Update Case Status</h3>
+        <p id="modal-report-id" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+
+        <div class="form-group">
+            <label>New Status</label>
+            <select id="status-select" class="form-input">
+                <option value="Submitted">Submitted</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Investigating">Investigating</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Closed">Closed</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+            <label>Officer Investigation Comment / Log Note</label>
+            <textarea id="status-comment" class="form-input" rows="3" placeholder="Enter investigation update or reason for status change..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button onclick="closeModal()" class="btn btn-outline" style="flex: 1;">Cancel</button>
+            <button onclick="saveStatus()" class="btn btn-primary" style="flex: 1;">Update Status</button>
+        </div>
+    </div>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let selectedReportId = null;
+
+        async function loadAdminData() {
+            if (localStorage.getItem('role') !== 'admin' && localStorage.getItem('role') !== 'officer') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const stats = await api.get('/admin/stats');
+                document.getElementById('stat-total').innerText = stats.total;
+                document.getElementById('stat-pending').innerText = stats.pending;
+                document.getElementById('stat-review').innerText = stats.under_review;
+                document.getElementById('stat-users').innerText = stats.total_users || 0;
+
+                // Load Crime Reports
+                const reports = await api.get('/admin/reports');
+                const tbody = document.getElementById('reports-table-body');
+                tbody.innerHTML = '';
+
+                reports.forEach(r => {
+                    const date = new Date(r.created_at).toLocaleDateString();
+                    const statusColors = {
+                        'Submitted': 'rgba(245, 158, 11, 0.2)',
+                        'Under Review': 'rgba(99, 102, 241, 0.2)',
+                        'Investigating': 'rgba(236, 72, 153, 0.2)',
+                        'Resolved': 'rgba(16, 185, 129, 0.2)',
+                        'Closed': 'rgba(107, 114, 128, 0.2)'
+                    };
+                    const textColors = {
+                        'Submitted': '#fbbf24',
+                        'Under Review': '#818cf8',
+                        'Investigating': '#f472b6',
+                        'Resolved': '#34d399',
+                        'Closed': '#9ca3af'
+                    };
+
+                    const reporterStr = r.is_anonymous ? '🕵️ Anonymous' : `👤 ${r.reporter.full_name} (${r.reporter.username})`;
+
+                    const row = `
+                        <tr>
+                            <td style="font-family: monospace; font-weight: 600;">${r.tracking_id}</td>
+                            <td><b>${r.title}</b></td>
+                            <td>${r.category}</td>
+                            <td><span style="font-weight: 700; color: ${r.severity === 'Critical' ? '#ef4444' : r.severity === 'High' ? '#f97316' : '#38bdf8'}">${r.severity || 'Medium'}</span></td>
+                            <td style="font-size: 0.85rem;">${reporterStr}</td>
+                            <td>
+                                <span class="status-badge" style="background: ${statusColors[r.status] || 'rgba(255,255,255,0.1)'}; color: ${textColors[r.status] || '#fff'}">
+                                    ${r.status}
+                                </span>
+                            </td>
+                            <td>${date}</td>
+                            <td>
+                                <button onclick="viewDetails(${r.id})" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">View</button>
+                                <button onclick="openStatusModal(${r.id}, '${r.tracking_id}', '${r.status}')" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">Status</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+                // Load Users List
+                const users = await api.get('/admin/users');
+                const usersTbody = document.getElementById('users-table-body');
+                usersTbody.innerHTML = '';
+
+                users.forEach(u => {
+                    const row = `
+                        <tr>
+                            <td style="font-family: monospace;">#${u.id}</td>
+                            <td><b>${u.full_name}</b></td>
+                            <td><code>${u.username}</code></td>
+                            <td>${u.email}</td>
+                            <td>${u.phone_number}</td>
+                            <td><span style="padding: 0.2rem 0.6rem; border-radius: 4px; font-weight:700; background: ${u.role==='admin'?'#ef4444':u.role==='officer'?'#3b82f6':'rgba(255,255,255,0.1)'}">${u.role.toUpperCase()}</span></td>
+                            <td><b style="color: var(--primary);">${u.total_reports_filed}</b></td>
+                            <td>
+                                <button onclick="viewUserCrimes(${u.id})" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">📁 User Complaints</button>
+                            </td>
+                        </tr>
+                    `;
+                    usersTbody.innerHTML += row;
+                });
+
+            } catch (err) {
+                showNotification("Error loading admin data", "error");
+            }
+        }
+
+        async function viewUserCrimes(userId) {
+            try {
+                const res = await api.get(`/admin/users/${userId}`);
+                const modal = document.getElementById('user-audit-modal');
+                const content = document.getElementById('user-audit-content');
+                const u = res.user_information;
+                const crimes = res.submitted_crimes;
+
+                let crimesListHtml = crimes.length > 0 ? crimes.map(c => `
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-family:monospace; font-weight:bold; color:var(--primary);">${c.tracking_id}</span>
+                            <span class="status-badge" style="background: rgba(99,102,241,0.2); color:#818cf8">${c.status}</span>
+                        </div>
+                        <h4 style="margin: 0.5rem 0;">${c.title}</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">${c.description}</p>
+                        <p style="font-size:0.8rem; margin-top:0.5rem;">📍 <b>Location:</b> ${c.location} | 🏷️ <b>Category:</b> ${c.category}</p>
+                    </div>
+                `).join('') : '<p style="color: var(--text-muted)">No complaints filed by this user yet.</p>';
+
+                content.innerHTML = `
+                    <h3 style="margin-bottom: 0.5rem;">👤 Citizen Profile & Complaint Audit</h3>
+                    <div style="background: rgba(99,102,241,0.1); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <p><strong>Full Name:</strong> ${u.full_name}</p>
+                        <p><strong>Username:</strong> ${u.username}</p>
+                        <p><strong>Email Address:</strong> ${u.email}</p>
+                        <p><strong>Phone Number:</strong> ${u.phone_number}</p>
+                        <p><strong>Role Account:</strong> ${u.role}</p>
+                        <p><strong>Registered Date:</strong> ${new Date(u.created_at).toLocaleString()}</p>
+                        <p><strong>Total Submitted Complaints:</strong> ${res.total_crimes_count}</p>
+                    </div>
+                    <h4>Complaints Filed by ${u.full_name}:</h4>
+                    <div style="margin-top: 1rem;">${crimesListHtml}</div>
+                `;
+
+                modal.style.display = 'block';
+            } catch (err) {
+                showNotification("Error loading user audit details", "error");
+            }
+        }
+
+        function closeUserAudit() {
+            document.getElementById('user-audit-modal').style.display = 'none';
+        }
+
+        async function viewDetails(id) {
+            try {
+                const r = await api.get(`/admin/reports/${id}`);
+                const modal = document.getElementById('details-modal');
+                const content = document.getElementById('details-content');
+
+                let historyHtml = r.status_history.length > 0 ?
+                    r.status_history.map(sh => `<li style="margin-bottom:0.4rem;"><b>[${new Date(sh.timestamp).toLocaleString()}] ${sh.status}</b> by <i>${sh.updated_by}</i>: ${sh.comment || 'N/A'}</li>`).join('') :
+                    '<li>No status history</li>';
+
+                let evidenceHtml = r.evidence.length > 0 ?
+                    r.evidence.map(e => `<li><a href="http://127.0.0.1:5000/uploads/${e.file_path}" target="_blank" style="color: var(--primary)">${e.file_path}</a></li>`).join('') :
+                    '<li>No evidence attached</li>';
+
+                content.innerHTML = `
+                    <div style="margin-bottom: 1.5rem;">
+                        <span class="status-badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8">${r.status}</span>
+                        <h3 style="margin-top: 0.5rem;">${r.title}</h3>
+                        <p style="color: var(--text-muted)">Tracking ID: ${r.tracking_id} | Severity: <b>${r.severity}</b></p>
+                    </div>
+                    <div style="margin-bottom: 1.5rem; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                        <p><strong>Reporter Name:</strong> ${r.reporter.full_name} (${r.reporter.username})</p>
+                        <p><strong>Email Address:</strong> ${r.reporter.email}</p>
+                        <p><strong>Phone Number:</strong> ${r.phone_number || r.reporter.phone_number || 'N/A'}</p>
+                        <p><strong>Aadhar / Govt ID:</strong> ${r.aadhar || 'N/A'}</p>
+                        <p><strong>Anonymous Submission:</strong> ${r.is_anonymous ? 'Yes (Identity revealed to Admin)' : 'No'}</p>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 0.5rem 0;">
+                            <p><strong>Location:</strong> ${r.location}</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.location)}" 
+                               target="_blank" class="btn btn-outline" 
+                               style="padding: 0.2rem 0.5rem; font-size: 0.7rem; border-color: var(--secondary); color: var(--secondary);">
+                               📍 View on Map
+                            </a>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Description:</strong></p>
+                        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem; margin-top: 0.5rem;">${r.description}</p>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <p><strong>Investigation Log & History:</strong></p>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.2rem; font-size: 0.85rem;">${historyHtml}</ul>
+                    </div>
+                    <div>
+                        <p><strong>Uploaded Evidence:</strong></p>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">${evidenceHtml}</ul>
+                    </div>
+                `;
+                modal.style.display = 'block';
+            } catch (err) {
+                showNotification("Error loading report details", "error");
+            }
+        }
+
+        function closeDetails() {
+            document.getElementById('details-modal').style.display = 'none';
+        }
+
+        function openStatusModal(id, tid, currentStatus) {
+            selectedReportId = id;
+            document.getElementById('modal-report-id').innerText = `Report: ${tid}`;
+            document.getElementById('status-select').value = currentStatus;
+            document.getElementById('status-comment').value = '';
+            document.getElementById('status-modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('status-modal').style.display = 'none';
+        }
+
+        async function saveStatus() {
+            const status = document.getElementById('status-select').value;
+            const comment = document.getElementById('status-comment').value;
+            try {
+                const res = await api.put(`/admin/reports/${selectedReportId}/status`, { status, comment });
+                if (res.msg.includes("successfully")) {
+                    showNotification("Status updated!");
+                    closeModal();
+                    loadAdminData();
+                }
+            } catch (err) {
+                showNotification("Error updating status", "error");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAdminData);
+    </script>
+
+</body>
+
+</html>

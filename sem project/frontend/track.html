@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Report - SAFEGUARD</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="glass"
+        style="border-top: 4px solid var(--primary); border-bottom: 4px solid var(--secondary); justify-content: space-between;">
+        <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" height="40"
+                style="filter: drop-shadow(0 0 5px white);">
+            <div>SAFEGUARD<span style="color: var(--accent);">.gov.in</span></div>
+        </a>
+        <nav>
+            <ul style="display: flex; gap: 2rem; align-items: center; list-style: none;">
+                <li><a href="index.html"
+                        style="text-decoration: none; color: var(--text-white); font-weight: 600;">Home</a></li>
+                <li><a href="track.html"
+                        style="text-decoration: none; color: var(--text-white); font-weight: 600;">Track Status</a></li>
+                <li><button onclick="localStorage.removeItem('token'); window.location.href='portal.html'"
+                        class="btn btn-outline" style="padding: 0.4rem 1rem;">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" style="position: relative;">
+        <div class="hero-glow"></div>
+
+        <div style="max-width: 700px; margin: 6rem auto;">
+            <div style="text-align: center; margin-bottom: 4rem; animation: slideUp 0.8s ease;">
+                <h2 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem;">Case <span
+                        style="color: var(--primary);">Tracking</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Monitor the real-time status of your official
+                    report.</p>
+            </div>
+
+            <div class="glass-card" style="padding: 4rem; animation: slideUp 1s ease;">
+                <div class="form-group" style="animation: slideUp 1.2s ease;">
+                    <label style="font-size: 1.1rem; margin-bottom: 1rem; display: block;">Enter Your Tracking
+                        ID</label>
+                    <input type="text" id="tracking-id-input" class="form-input" placeholder="OCR-XXXXXXXX"
+                        style="text-transform: uppercase; font-size: 1.5rem; letter-spacing: 2px; padding: 1.5rem; text-align: center;">
+                </div>
+                <button onclick="trackReport()" class="btn btn-primary"
+                    style="width: 100%; padding: 1.25rem; font-size: 1.2rem; margin-top: 2rem; animation: slideUp 1.4s ease;">Fetch
+                    Status</button>
+            </div>
+
+            <div id="status-card" class="glass-card"
+                style="display: none; margin-top: 3rem; padding: 3rem; animation: slideUp 0.5s ease;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                    <div>
+                        <h4 id="res-title" style="font-size: 2rem; font-weight: 800;"></h4>
+                        <p id="res-id"
+                            style="color: var(--text-white); background: var(--accent); display: inline-block; padding: 0.2rem 1rem; border-radius: 0.5rem; font-size: 1rem; margin-top: 1rem;">
+                        </p>
+                    </div>
+                    <span id="res-status"
+                        style="padding: 0.6rem 1.5rem; border-radius: 2rem; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;"></span>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--glass-border); margin: 2rem 0;">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Incident Category
+                        </p>
+                        <p id="res-category" style="font-weight: 700; font-size: 1.2rem;"></p>
+                    </div>
+                    <div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Submission
+                            Timestamp</p>
+                        <p id="res-date" style="font-weight: 700; font-size: 1.2rem;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="notification-bar" class="notification glass"></div>
+
+    <script src="js/api.js"></script>
+    <script>
+        async function trackReport() {
+            const id = document.getElementById('tracking-id-input').value.trim();
+            if (!id) return showNotification("Please enter a Tracking ID", "error");
+
+            try {
+                const res = await api.get(`/reports/track/${id}`);
+                if (res.tracking_id) {
+                    const statusCard = document.getElementById('status-card');
+                    document.getElementById('res-title').innerText = res.title;
+                    document.getElementById('res-id').innerText = `ID: ${res.tracking_id}`;
+                    document.getElementById('res-category').innerText = res.category;
+
+                    const date = new Date(res.created_at);
+                    document.getElementById('res-date').innerText = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    const statusEl = document.getElementById('res-status');
+                    statusEl.innerText = res.status;
+
+                    // Simple status coloring
+                    const colors = {
+                        'Submitted': { bg: 'rgba(245, 158, 11, 0.2)', text: '#fbbf24' },
+                        'Under Review': { bg: 'rgba(99, 102, 241, 0.2)', text: '#818cf8' },
+                        'Closed': { bg: 'rgba(16, 185, 129, 0.2)', text: '#34d399' }
+                    };
+                    const color = colors[res.status] || colors['Submitted'];
+                    statusEl.style.backgroundColor = color.bg;
+                    statusEl.style.color = color.text;
+
+                    statusCard.style.display = 'block';
+                } else {
+                    showNotification("Invalid Tracking ID", "error");
+                    document.getElementById('status-card').style.display = 'none';
+                }
+            } catch (err) {
+                showNotification("Error tracking report", "error");
+            }
+        }
+    </script>
+</body>
+
+</html>
